@@ -5,3 +5,9 @@
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
+.container {
+    width: 1400px;
+    padding: 0px 12px;
+    margin:  0 auto;
+}
