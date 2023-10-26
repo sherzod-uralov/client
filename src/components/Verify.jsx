@@ -85,6 +85,7 @@ const EmailVerification = () => {
             {verificationCode.map((digit, index) => (
               <input
                 key={index}
+                
                 id={`code-input-${index}`}
                 type="text"
                 maxLength="1"
