@@ -9,8 +9,8 @@ import { useUserContext } from '../context/Context'
 function RouterBrowser() {
   const { token } = useUserContext()
 
-  const tok = token || localStorage.getItem('token')
-  console.log('Token:', token) // Debug log
+  const tok = (token || localStorage.getItem('token'))
+  console.log(tok !== undefined);
   return (
     <BrowserRouter>
       <Routes>
@@ -19,7 +19,7 @@ function RouterBrowser() {
         <Route path="/verify" element={<Verify />} />
         <Route
           path="/"
-          element={tok ? <HomePage /> : <Navigate to="/register" />}
+          element={tok !== undefined ? <Navigate to="/register"/>:  <HomePage />}
         />
       </Routes>
     </BrowserRouter>

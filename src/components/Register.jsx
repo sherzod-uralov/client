@@ -8,6 +8,7 @@ import uz from '../assets/svg/usa.svg'
 import axios from 'axios'
 import {LINK} from '../api/PORT.js'
 import { useNavigate } from 'react-router-dom'
+import { useUserContext } from '../context/Context'
 
 const options = [
   { value: 'eng', label: 'English', icon: uz },
@@ -25,10 +26,18 @@ const Register = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const [error, setError] = useState('')
+  const {validateEmail} = useUserContext();
+
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault()
+
+    if(password.length < 8){
+      setError('parol juda qisqa');
+      return false;
+    }
     try {
       const response = await axios.post(`${LINK}/register`,{
         username,
@@ -81,14 +90,14 @@ const Register = () => {
           <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-5">
             <input
               type="text"
-              className="py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none"
+              className={`${username.length === 0 ? 'border-gray-200' : 'border-green-300'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value.trim())}
             />
             <input
               type="text"
-              className="py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none"
+              className={`${validateEmail(email) ? 'border-green-400' : email.length === 0 ? 'border-gray-200' :'border-red-500'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
