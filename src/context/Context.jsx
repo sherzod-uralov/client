@@ -9,6 +9,8 @@ export function UserProvider({ children }) {
     return regex.test(email);
   }
 
+  
+
   return (
     <UserContext.Provider value={{ user, setUser, token, setToken,validateEmail }}>
       {children}

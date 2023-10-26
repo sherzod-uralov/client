@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Rsvg from '../assets/svg/Logo.svg'
 import { FcGoogle } from 'react-icons/fc'
 import registerBg from '../assets/images/free-photo-black-grunge-abstract-background-pattern-wallpaper 1.png'
 import Select from 'react-select'
 import us from '../assets/svg/uzb.svg'
 import uz from '../assets/svg/usa.svg'
+import { useUserContext } from '../context/Context'
+import axios from 'axios'
+import { LINK } from '../api/PORT'
 
 const options = [
   { value: 'eng', label: 'English', icon: uz },
@@ -19,6 +22,32 @@ const CustomOption = ({ data, innerProps }) => (
 )
 
 const Login = () => {
+  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const {validateEmail,setToken} = useUserContext();
+  const [emailErr,setEmailErr] = useState('');
+
+  const loginSubmit = async (e) => {
+
+    if(validateEmail(email)){
+      setEmailErr('wrong email format')
+      return false;
+    }
+    try {
+      const response = await axios.post(`${LINK}/login`,{
+        password,
+        email
+      });
+
+      if(response.status === 200){
+        setToken(response.data.token)
+        localStorage.setItem('token', response.data.token);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10 pb-32 items-center">
@@ -54,20 +83,25 @@ const Login = () => {
         </div>
         <div>
           <form className="mt-5 flex flex-col gap-5">
-            <input
+          <input
               type="text"
-              className="py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm focus:border-yellow-200 outline-none"
-              placeholder="Username"
-            />
-            <input
-              type="text"
-              className="py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm focus:border-yellow-200 outline-none"
+              className={`${validateEmail(email) ? 'border-green-400' : email.length === 0 ? 'border-gray-200' :'border-red-500'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value.trim())}
             />
             <input
               type="password"
-              className="py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm focus:border-yellow-200 outline-none"
+              className={`${
+                password.length >= 8
+                  ? 'border-green-400'
+                  : password.length === 0
+                  ? 'border-gray-200'
+                  : 'border-red-500'
+              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md transition-all text-sm outline-none`}
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value.trim())}
             />
           </form>
           <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
