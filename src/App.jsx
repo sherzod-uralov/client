@@ -1,9 +1,6 @@
 import './style/index.css'
 
 function App() {
-<<<<<<< Updated upstream
-  return <></>
-=======
   return (
     <>
       <div>
@@ -12,7 +9,6 @@ function App() {
       </div>
     </>
   )
->>>>>>> Stashed changes
 }
 
 export default App
