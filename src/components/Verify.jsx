@@ -25,7 +25,7 @@ const EmailVerification = () => {
       const response = await axios.post(`${LINK}/verify`, {
         code: Number(verificationCode.join('')),
       })
-      if (response.status === 'OK') {
+      if (response.status === 201) {
         setToken(response.data.token)
         localStorage.setItem('token', response.data.token)
         navigate('/')
