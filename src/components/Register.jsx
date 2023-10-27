@@ -6,7 +6,7 @@ import Select from 'react-select'
 import us from '../assets/svg/uzb.svg'
 import uz from '../assets/svg/usa.svg'
 import axios from 'axios'
-import {LINK} from '../api/PORT.js'
+import { LINK } from '../api/PORT.js'
 import { useNavigate } from 'react-router-dom'
 import { useUserContext } from '../context/Context'
 
@@ -27,31 +27,31 @@ const Register = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
-  const {validateEmail} = useUserContext();
+  const { validateEmail } = useUserContext()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const onSubmit = async (e) => {
     e.preventDefault()
 
-    if(password.length < 8){
-      setError('parol juda qisqa');
-      return false;
+    if (password.length < 8) {
+      setError('parol juda qisqa')
+      return false
     }
     try {
-      const response = await axios.post(`${LINK}/register`,{
+      const response = await axios.post(`${LINK}/register`, {
         username,
         password,
-        email
-      });
-      console.log(response);
-      if(response.status == 200 && response.statusText == "OK"){
+        email,
+      })
+      console.log(response)
+      if (response.status == 200 && response.statusText == 'OK') {
         navigate('/verify')
-      }      
-    } catch (error) { 
-      console.log(error);
+      }
+    } catch (error) {
+      console.log(error)
     }
-  } 
+  }
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -90,14 +90,22 @@ const Register = () => {
           <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-5">
             <input
               type="text"
-              className={`${username.length === 0 ? 'border-gray-200' : 'border-green-300'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
+              className={`${
+                username.length === 0 ? 'border-gray-200' : 'border-green-300'
+              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value.trim())}
             />
             <input
               type="text"
-              className={`${validateEmail(email) ? 'border-green-400' : email.length === 0 ? 'border-gray-200' :'border-red-500'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
+              className={`${
+                validateEmail(email)
+                  ? 'border-green-400'
+                  : email.length === 0
+                  ? 'border-gray-200'
+                  : 'border-red-500'
+              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
@@ -115,9 +123,9 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
-          <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-black">
-            Register
-          </button>
+            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-black">
+              Register
+            </button>
           </form>
           <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
             <input type="checkbox" className="" />

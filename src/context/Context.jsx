@@ -5,14 +5,14 @@ export function UserProvider({ children }) {
   const [token, setToken] = useState(null)
 
   function validateEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(email)
   }
 
-  
-
   return (
-    <UserContext.Provider value={{ user, setUser, token, setToken,validateEmail }}>
+    <UserContext.Provider
+      value={{ user, setUser, token, setToken, validateEmail }}
+    >
       {children}
     </UserContext.Provider>
   )

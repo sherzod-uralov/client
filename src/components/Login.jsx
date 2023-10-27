@@ -24,29 +24,28 @@ const CustomOption = ({ data, innerProps }) => (
 const Login = () => {
   const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
-  const {validateEmail,setToken} = useUserContext();
-  const [emailErr,setEmailErr] = useState('');
+  const { validateEmail, setToken } = useUserContext()
+  const [emailErr, setEmailErr] = useState('')
 
   const loginSubmit = async (e) => {
-
-    if(validateEmail(email)){
+    if (validateEmail(email)) {
       setEmailErr('wrong email format')
-      return false;
+      return false
     }
     try {
-      const response = await axios.post(`${LINK}/login`,{
+      const response = await axios.post(`${LINK}/login`, {
         password,
-        email
-      });
+        email,
+      })
 
-      if(response.status === 200){
+      if (response.status === 200) {
         setToken(response.data.token)
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.token)
       }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  } 
+  }
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
@@ -83,9 +82,15 @@ const Login = () => {
         </div>
         <div>
           <form className="mt-5 flex flex-col gap-5">
-          <input
+            <input
               type="text"
-              className={`${validateEmail(email) ? 'border-green-400' : email.length === 0 ? 'border-gray-200' :'border-red-500'} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
+              className={`${
+                validateEmail(email)
+                  ? 'border-green-400'
+                  : email.length === 0
+                  ? 'border-gray-200'
+                  : 'border-red-500'
+              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
