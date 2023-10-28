@@ -2,14 +2,18 @@ import React from 'react'
 import left from '../../assets/images/welcome-left.png'
 import right from '../../assets/images/welcome-right.png'
 import like from '../../assets/images/logo.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AiFillAndroid, AiFillWindows, AiFillApple } from 'react-icons/ai'
 import center from '../../assets/images/welcome-center.png'
 
 const Hero = () => {
+  const navigatge = useNavigate()
+  const click = () => {
+    navigatge('/register')
+  }
   return (
     <div className="container">
-      <div className="flex items-end justify-evenly mt-16">
+      <div className="flex items-end justify-evenly mt-16 mb-12">
         <img
           src={left}
           className="w-[296px] h-[458px] hidden xl:block"
@@ -28,7 +32,10 @@ const Hero = () => {
           <p className="text-[20px] w-[348px] text-center hidden xl:block">
             To Do gives you focus, from work to play.
           </p>
-          <button className="px-12 py-3 border-none rounded-sm block m-auto mt-7 xl:mt-12 font-bold bg-[#0078d4] text-white ">
+          <button
+            onClick={click}
+            className="px-12 py-3 border-none rounded-sm block m-auto mt-7 xl:mt-12 font-bold bg-[#0078d4] text-white "
+          >
             Get started
           </button>
           <Link className="text-center block pt-3 text-[#0071c8]">
@@ -48,7 +55,9 @@ const Hero = () => {
               <AiFillApple className="text-[25px] text-gray-500" />
             </div>
           </div>
-          <span className="text-center block pt-7 font-normal text-gray-600">Terms of use for To Do</span>
+          <span className="text-center block pt-7 font-normal text-gray-600">
+            Terms of use for To Do
+          </span>
         </div>
         <img
           src={right}

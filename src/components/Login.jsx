@@ -8,6 +8,7 @@ import uz from '../assets/svg/usa.svg'
 import { useUserContext } from '../context/Context'
 import axios from 'axios'
 import { LINK } from '../api/PORT'
+import { useNavigate } from 'react-router-dom'
 
 const options = [
   { value: 'eng', label: 'English', icon: uz },
@@ -26,9 +27,11 @@ const Login = () => {
   const [email, setEmail] = useState('')
   const { validateEmail, setToken } = useUserContext()
   const [emailErr, setEmailErr] = useState('')
-
+  const [passErr, setPassErr] = useState(false)
+  const navigate = useNavigate('')
   const loginSubmit = async (e) => {
-    if (validateEmail(email)) {
+    e.preventDefault()
+    if (!validateEmail(email)) {
       setEmailErr('wrong email format')
       return false
     }
@@ -37,13 +40,17 @@ const Login = () => {
         password,
         email,
       })
-
       if (response.status === 200) {
         setToken(response.data.token)
         localStorage.setItem('token', response.data.token)
+        setTimeout(() => {
+          navigate('/homepage')
+        }, 200)
       }
     } catch (error) {
-      console.log(error)
+      if (error.response.status == 400) {
+        setPassErr(true)
+      }
     }
   }
 
@@ -81,7 +88,7 @@ const Login = () => {
           <span className="w-12 md:w-24 bg-gray-300 h-0.5"></span>
         </div>
         <div>
-          <form className="mt-5 flex flex-col gap-5">
+          <form onSubmit={loginSubmit} className="mt-5 flex flex-col gap-5">
             <input
               type="text"
               className={`${
@@ -98,24 +105,28 @@ const Login = () => {
             <input
               type="password"
               className={`${
-                password.length >= 8
+                passErr
+                  ? 'border-red-500'
+                  : password.length >= 8
                   ? 'border-green-400'
-                  : password.length === 0
-                  ? 'border-gray-200'
-                  : 'border-red-500'
+                  : 'border-gray-200'
               } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md transition-all text-sm outline-none`}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
+
+            <div className="flex md:max-w-[580px] m-auto text-red-600">
+              <span className="w-full">{passErr ? 'wrong password' : ''}</span>
+            </div>
+            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-black">
+              Login
+            </button>
           </form>
           <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
             <input type="checkbox" className="" />
             <span>Remember Me</span>
           </div>
-          <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-black">
-            Login
-          </button>
         </div>
       </div>
       <div className="h-full w-full md:w-1/2">

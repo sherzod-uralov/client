@@ -28,7 +28,7 @@ const EmailVerification = () => {
       if (response.status === 201) {
         setToken(response.data.token)
         localStorage.setItem('token', response.data.token)
-        navigate('/')
+        navigate('/homepage')
       }
       console.log(response)
     }
