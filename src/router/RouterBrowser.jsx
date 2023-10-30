@@ -5,6 +5,10 @@ import Verify from '../components/Verify'
 import HomePage from '../components/HomePage'
 import WelcomePage from '../components/WelcomePage'
 import PrivateRoute from '../utils/PrivateRoute'
+import Nav from '../components/homePage/Nav'
+import SideBar from '../components/homePage/SideBar'
+import List from '../components/homePage/List'
+import NotFound from '../utils/NotFound'
 
 function RouterBrowser() {
   const token = localStorage.getItem('token')
@@ -14,12 +18,33 @@ function RouterBrowser() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/verify" element={<Verify />} />
-        <Route
-          path="/"
-          element={token ? <Navigate to="/homepage" /> : <WelcomePage />}
-        />
+        <Route path="/welcome" element={<WelcomePage />} />
+        <Route path="*" element={<NotFound />} />
         <Route element={<PrivateRoute />}>
-          <Route path="/homepage" element={<HomePage />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Nav />
+                <div className="flex">
+                  <SideBar />
+                  <HomePage />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/list"
+            element={
+              <>
+                <Nav />
+                <div className="flex">
+                  <SideBar />
+                  <List />
+                </div>
+              </>
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>
