@@ -3,7 +3,7 @@ import Nav from './welcomepage/Nav'
 import Hero from './welcomepage/Hero'
 function WelcomePage() {
   return (
-    <div className=''>
+    <div className="">
       <Nav />
       <Hero />
     </div>

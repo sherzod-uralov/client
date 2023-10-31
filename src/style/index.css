@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  background-color: #faf9f7;
+}
 @font-face {
   font-family: 'poppins';
   src: url(../fonts/Poppins-Light.ttf);
@@ -16,7 +19,7 @@
 .shadow-custom-dark {
   box-shadow: 0px 1px 13px -5px rgba(255, 255, 255, 1) !important;
 }
-.day{
+.day {
   font-family: 'poppins-regular';
 }
 

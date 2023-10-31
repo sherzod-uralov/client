@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Rsvg from '../assets/svg/Logo.svg'
+import logo from '../assets/svg/Microsoft-Logo.wine.svg'
 import { FcGoogle } from 'react-icons/fc'
 import registerBg from '../assets/images/free-photo-black-grunge-abstract-background-pattern-wallpaper 1.png'
 import Select from 'react-select'
@@ -44,7 +44,7 @@ const Login = () => {
         setToken(response.data.token)
         localStorage.setItem('token', response.data.token)
         setTimeout(() => {
-          navigate('/homepage')
+          navigate('/')
         }, 200)
       }
     } catch (error) {
@@ -59,7 +59,7 @@ const Login = () => {
     <div className="flex flex-col md:flex-row h-screen">
       <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10 pb-32 items-center">
         <div className="flex justify-between items-center">
-          <img src={Rsvg} alt="register-logo" />
+          <img src={logo} className="w-36 h-28" alt="register-logo" />
           <div style={{ width: '120px' }}>
             <Select
               options={options}

@@ -25,10 +25,11 @@ const EmailVerification = () => {
       const response = await axios.post(`${LINK}/verify`, {
         code: Number(verificationCode.join('')),
       })
+      console.log(response.data.token)
       if (response.status === 201) {
         setToken(response.data.token)
         localStorage.setItem('token', response.data.token)
-        navigate('/homepage')
+        navigate('/')
       }
       console.log(response)
     }
@@ -78,23 +79,27 @@ const EmailVerification = () => {
           Emailni Tasdiqlash
         </h2>
         <p className="mb-6 text-center">
-          Foydalanuvchi telefon raqamingizga yuborilgan 6 xonali kodni kiriting.
+          Foydalanuvchi emailiga kod yuborilgan 6 xonali kodni kiriting.
         </p>
-        <div className="flex items-center justify-center mb-4 space-x-2">
-          <form onSubmit={onSubmit}>
-            {verificationCode.map((digit, index) => (
-              <input
-                key={index}
-                id={`code-input-${index}`}
-                type="text"
-                maxLength="1"
-                value={digit}
-                onChange={(e) => handleInputChange(index, e)}
-                onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-10 h-10 text-2xl text-center border border-gray-300 rounded"
-              />
-            ))}
-            <button>click</button>
+        <div className="flex items-center justify-center mb-">
+          <form onSubmit={onSubmit} className="">
+            <div className="flex gap-2">
+              {verificationCode.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`code-input-${index}`}
+                  type="text"
+                  maxLength="1"
+                  value={digit}
+                  onChange={(e) => handleInputChange(index, e)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  className="w-10 h-10 text-2xl text-center border border-gray-300 rounded"
+                />
+              ))}
+            </div>
+            <button className="px-[1px] py-2 bg-slate-600 w-full mt-6 rounded-lg">
+              verify
+            </button>
           </form>
           {error}
         </div>

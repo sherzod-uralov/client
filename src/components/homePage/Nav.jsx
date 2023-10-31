@@ -28,10 +28,10 @@ const Nav = () => {
   useEffect(() => {
     if (darkMode == 'dark') {
       document.documentElement.classList.add('dark')
-      document.body.style.background = '#11100e'
+      document.documentElement.style.background = '#11100e'
     } else {
       document.documentElement.classList.remove('dark')
-      document.body.style.background = 'white'
+      document.documentElement.style.background = '#faf9f7'
     }
   }, [darkMode])
 

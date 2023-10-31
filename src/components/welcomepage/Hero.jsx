@@ -9,7 +9,12 @@ import center from '../../assets/images/welcome-center.png'
 const Hero = () => {
   const navigatge = useNavigate()
   const click = () => {
-    navigatge('/register')
+    const token = localStorage.getItem('token')
+    if (token) {
+      navigatge('/')
+    } else {
+      navigatge('/register')
+    }
   }
   return (
     <div className="container">

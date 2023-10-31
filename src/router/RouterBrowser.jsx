@@ -19,7 +19,6 @@ function RouterBrowser() {
         <Route path="/login" element={<Login />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/welcome" element={<WelcomePage />} />
-        <Route path="*" element={<NotFound />} />
         <Route element={<PrivateRoute />}>
           <Route
             path="/"
@@ -46,6 +45,7 @@ function RouterBrowser() {
             }
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
