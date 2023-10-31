@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import logo from '../assets/svg/Microsoft-Logo.wine.svg'
 import { FcGoogle } from 'react-icons/fc'
-import registerBg from '../assets/images/free-photo-black-grunge-abstract-background-pattern-wallpaper 1.png'
+import registerBg from '../assets/images/loginLogo.png'
 import Select from 'react-select'
 import us from '../assets/svg/uzb.svg'
 import uz from '../assets/svg/usa.svg'
 import axios from 'axios'
 import { LINK } from '../api/PORT.js'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useUserContext } from '../context/Context'
 
 const options = [
@@ -55,9 +55,9 @@ const Register = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10 pb-32 items-center">
+      <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-0  items-center ">
         <div className="flex justify-between items-center">
-          <img src={logo} className="w-36 h-32" alt="register-logo" />
+          <img src={logo} className="w-36 h-28" alt="register-logo" />
           <div style={{ width: '120px' }}>
             <Select
               options={options}
@@ -66,12 +66,12 @@ const Register = () => {
             />
           </div>
         </div>
-        <div className="pt-10 md:pt-24">
-          <h1 className="font-bold text-2xl md:text-4xl lg:text-6xl text-center">
-            Welcome Ruix
+        <div className="pt-10 md:pt-3">
+          <h1 className="font-normal text-3xl md:text-4xl lg:text-4xl text-center">
+            Welcome to
           </h1>
-          <p className="font-normal text-lg md:text-xl lg:text-2xl text-center">
-            Welcome to Ruix. dashboard Community
+          <p className="font-semibold text-4xl md:text-xl pt-4 lg:text-5xl text-center text-[#2564ce]">
+            Microsoft ToDo
           </p>
         </div>
         <button className="border-gray-200 border-2 border-solid  m-auto w-full max-w-[580px] py-4 rounded-lg mt-14 bg-white flex items-center justify-center gap-3">
@@ -82,9 +82,9 @@ const Register = () => {
         </button>
 
         <div className="flex items-center gap-4 justify-center mt-6">
-          <span className="w-12 md:w-24 bg-gray-300 h-0.5"></span>
-          <span className="text-gray-300 text-lg lg:text-xl">or</span>
-          <span className="w-12 md:w-24 bg-gray-300 h-0.5"></span>
+          <span className="w-12 md:w-24 bg-[#2564ce] h-0.5"></span>
+          <span className="text-[#2564ce] text-lg lg:text-xl">or</span>
+          <span className="w-12 md:w-24 bg-[#2564ce] h-0.5"></span>
         </div>
         <div>
           <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-5">
@@ -123,18 +123,21 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
-            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-black">
+            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-[#2564ce]">
               Register
             </button>
           </form>
-          <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
-            <input type="checkbox" className="" />
-            <span>Remember Me</span>
-          </div>
+          <Link to="/login">
+            <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto ">
+              <h4 className="rounded-md border-solid  border-2 pt-[6px] pb-[6px] pl-[15px] pr-[15px] bg-[#2564ce] text-white font-bold ">
+                Login
+              </h4>
+            </div>
+          </Link>
         </div>
       </div>
       <div className="h-full w-full md:w-1/2">
-        <img src={registerBg} className="h-full w-full object-cover" alt="" />
+        <img src={registerBg} className="h-full w-full object-cover hidden md:block" alt="" />
       </div>
     </div>
   )
