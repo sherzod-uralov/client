@@ -56,8 +56,8 @@ const Register = () => {
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-0  items-center ">
-        <div className="flex justify-between items-center">
-          <img src={logo} className="w-36 h-28" alt="register-logo" />
+        <div className="flex justify-between items-center md:mt-8">
+          <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
           <div style={{ width: '120px' }}>
             <Select
               options={options}
@@ -66,28 +66,28 @@ const Register = () => {
             />
           </div>
         </div>
-        <div className="pt-10 md:pt-3">
-          <h1 className="font-normal text-3xl md:text-4xl lg:text-4xl text-center">
+        <div className="pt-0 md:pt-0 ">
+          <h1 className="font-normal text-3xl md:text-4xl lg:text-4xl text-center md:pb-5 md:pt-9">
             Welcome to
           </h1>
-          <p className="font-semibold text-4xl md:text-xl pt-4 lg:text-5xl text-center text-[#2564ce]">
+          <p className=" md:pb-4 font-semibold text-4xl md:text-xl pt-0 lg:text-5xl text-center text-[#2564ce]">
             Microsoft ToDo
           </p>
         </div>
-        <button className="border-gray-200 border-2 border-solid  m-auto w-full max-w-[580px] py-4 rounded-lg mt-14 bg-white flex items-center justify-center gap-3">
+        <button className=" md:mr-[83px] border-gray-200 border-2 border-solid  m-auto w-full max-w-[580px] py-4 rounded-lg mt-5 bg-white flex items-center justify-center gap-3">
           <FcGoogle className="text-lg lg:text-" />
           <h2 className="text-lg lg:text-xl text-center">
             Continue With Google
           </h2>
         </button>
 
-        <div className="flex items-center gap-4 justify-center mt-6">
+        <div className="flex items-center gap-4 justify-center mt-1 mb-[-15px] md:mr-9">
           <span className="w-12 md:w-24 bg-[#2564ce] h-0.5"></span>
           <span className="text-[#2564ce] text-lg lg:text-xl">or</span>
           <span className="w-12 md:w-24 bg-[#2564ce] h-0.5"></span>
         </div>
         <div>
-          <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-5">
+          <form onSubmit={onSubmit} className="mt-5 flex flex-col gap-5 md:mr-9">
             <input
               type="text"
               className={`${
@@ -118,7 +118,7 @@ const Register = () => {
                   : password.length === 0
                   ? 'border-gray-200'
                   : 'border-red-500'
-              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md transition-all text-sm outline-none`}
+              } py-[17px] text-[15px] px-4  block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md transition-all text-sm outline-none`}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
@@ -136,7 +136,7 @@ const Register = () => {
           </Link>
         </div>
       </div>
-      <div className="h-full w-full md:w-1/2">
+      <div className="  h-full w-full md:w-1/2 ">
         <img src={registerBg} className="h-full w-full object-cover hidden md:block" alt="" />
       </div>
     </div>

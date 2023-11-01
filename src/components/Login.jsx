@@ -57,9 +57,9 @@
 
     return (
       <div className="flex flex-col md:flex-row h-screen">
-        <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10 pb-32 items-center">
+        <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10  items-center">
           <div className="flex justify-between items-center">
-            <img src={logo} className="w-40 h-32" alt="register-logo" />
+            <img src={logo} className="w-40 h-20" alt="register-logo" />
             <div style={{ width: '120px' }}>
               <Select
                 options={options}
@@ -127,7 +127,9 @@
             <Link to='/register'>
             <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
               
-              Remember Me 
+            <h4 className="rounded-md border-solid  border-2 pt-[6px] pb-[6px] pl-[15px] pr-[15px] bg-[#2564ce] text-white font-bold ">
+                Register
+              </h4>
               
             </div>
             </Link>
