@@ -97,7 +97,7 @@ const EmailVerification = () => {
                 />
               ))}
             </div>
-            <button className="px-[1px] py-2 bg-slate-600 w-full mt-6 rounded-lg">
+            <button className="px-[1px] py-2 bg-[#2564ce] w-full mt-6 rounded-lg font-bold text-white">
               verify
             </button>
           </form>

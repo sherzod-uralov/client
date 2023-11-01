@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '../assets/svg/Microsoft-Logo.wine.svg'
 import { FcGoogle } from 'react-icons/fc'
 import registerBg from '../assets/images/loginLogo.png'
@@ -28,22 +28,47 @@ const Register = () => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState('')
   const { validateEmail } = useUserContext()
-
+  console.log(error)
   const navigate = useNavigate()
+
+  const getUsers = async () => {
+    try {
+      const users = await axios.get(`${LINK}/users`)
+      setError(users)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const find = error?.data?.information?.find((e) => e.email == email)
+
+  const checkEMail = () => {
+    if (email.length === 0) {
+      return 'border-gray-200'
+    }
+    if (!validateEmail(email) || find) {
+      return 'border-red-400'
+    } else {
+      return 'border-green-400'
+    }
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault()
-
-    if (password.length < 8) {
-      setError('parol juda qisqa')
-      return false
-    }
     try {
+      if (password.length < 8) {
+        setError('parol juda qisqa')
+        return false
+      }
+      if (find) {
+        return false
+      }
       const response = await axios.post(`${LINK}/register`, {
         username,
         password,
         email,
       })
+
       console.log(response)
       if (response.status == 200 && response.statusText == 'OK') {
         navigate('/verify')
@@ -53,22 +78,26 @@ const Register = () => {
     }
   }
 
+  useEffect(() => {
+    getUsers()
+  }, [])
+
   return (
     <div className="flex flex-col md:flex-row h-screen justify-between">
-       <div className="flex justify-between items-center pt-5 md:mt-8 md:hidden">
-          <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
-          <div style={{ width: '120px' }}>
-            <Select
-            className='pr-3'
-              options={options}
-              components={{ Option: CustomOption }}
-              defaultInputValue={options[0].label}
-            />
-          </div>
+      <div className="flex justify-between items-center  md:hidden">
+        <img src={logo} className="w-20 h-2 md:h-10" alt="register-logo" />
+        <div style={{ width: '120px' }}>
+          <Select
+            className="pr-3"
+            options={options}
+            components={{ Option: CustomOption }}
+            defaultInputValue={options[0].label}
+          />
         </div>
-      <div className="w-full md:w-1/2 p-5 md:pl-10 md:pr-10 md:pt-10  items-center ">
-        <div className="md:flex hidden justify-between items-center md:mt-8">
-          <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
+      </div>
+      <div className="w-full md:w-1/2  md:pl-10 md:pr-10   items-center ">
+        <div className="md:flex hidden justify-between items-center">
+          <img src={logo} className="w-28" alt="register-logo" />
           <div style={{ width: '120px' }}>
             <Select
               options={options}
@@ -109,13 +138,7 @@ const Register = () => {
             />
             <input
               type="text"
-              className={`${
-                validateEmail(email)
-                  ? 'border-green-400'
-                  : email.length === 0
-                  ? 'border-gray-200'
-                  : 'border-red-500'
-              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
+              className={`${checkEMail()} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
@@ -133,7 +156,10 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
-            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-[#2564ce]">
+            <span className="text-red-500">
+              {find ? 'email alredy exist' : ''}
+            </span>
+            <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full  bg-[#2564ce]">
               Register
             </button>
           </form>

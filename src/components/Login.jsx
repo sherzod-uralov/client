@@ -28,6 +28,7 @@ const Login = () => {
   const { validateEmail, setToken } = useUserContext()
   const [emailErr, setEmailErr] = useState('')
   const [passErr, setPassErr] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate('')
 
   const loginSubmit = async (e) => {
@@ -49,27 +50,39 @@ const Login = () => {
         }, 200)
       }
     } catch (error) {
-      console.log(error)
-      if (error.response.status == 400) {
-        setPassErr(true)
+      if (error.response.data.status === 400) {
+        console.log(error)
+        setError(error)
       }
+    }
+  }
+
+  const ceckPaswd = () => {
+    if (password.length == 0) {
+      return 'border-gray-200'
+    }
+    if (password.length < 8 || error?.response?.data?.msg == 'wrong password') {
+      return 'border-red-400'
+    } else {
+      return 'border-green-400'
     }
   }
 
   return (
     <div className="flex flex-col justify-between md:flex-row h-screen">
       <div className="flex justify-between items-center md:hidden">
-          <img src={logo} className="w-40 h-20" alt="register-logo" />
-          <div style={{ width: '120px' }}>
-            <Select className='pr-4'
-              options={options}
-              components={{ Option: CustomOption }}
-              defaultInputValue={options[0].label}
-            />
-          </div>
+        <img src={logo} className="w-40 h-20" alt="register-logo" />
+        <div style={{ width: '120px' }}>
+          <Select
+            className="pr-4"
+            options={options}
+            components={{ Option: CustomOption }}
+            defaultInputValue={options[0].label}
+          />
         </div>
+      </div>
       <div className="w-full md:w-1/2 p-5 md:pl-20 md:pr-10 md:pt-10 pb-12 items-center">
-      <div className="md:flex justify-between items-center hidden">
+        <div className="md:flex justify-between items-center hidden">
           <img src={logo} className="w-40 h-20" alt="register-logo" />
           <div style={{ width: '120px' }}>
             <Select
@@ -105,40 +118,38 @@ const Login = () => {
               type="text"
               className={`${
                 validateEmail(email)
-                  ? 'border-green-400'
-                  : email.length === 0
+                  ? error?.response?.data?.msg === 'username notfound'
+                    ? 'border-red-400'
+                    : 'border-green-400'
+                  : email.trim().length === 0
                   ? 'border-gray-200'
-                  : 'border-red-500'
-              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md text-sm outline-none`}
+                  : 'border-red-400'
+              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value.trim())}
             />
             <input
               type="password"
-              className={`${
-                passErr
-                  ? 'border-red-500'
-                  : password.length >= 8
-                  ? 'border-green-400'
-                  : 'border-gray-200'
-              } py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-gray-200 border-solid border-2 rounded-md transition-all text-sm outline-none`}
+              className={`${ceckPaswd()} py-[17px] text-[15px] px-4 block w-full md:max-w-[580px] m-auto border-solid border-2 rounded-md text-sm outline-none`}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
 
-            <div className="flex md:max-w-[580px] m-auto text-red-600">
-              <span className="w-full">{passErr ? 'wrong password' : ''}</span>
+            <div className=" md:max-w-[580px] m-auto text-red-600 font-semibold">
+              <span className="w-full">{error?.response?.data?.msg}</span>
+
+              <span className="w-full">{passErr ? 'wrong password' : ''} </span>
             </div>
             <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full mt-4 bg-[#2564ce]">
               Login
             </button>
           </form>
-          <Link to='/register'>
+          <Link to="/register">
             <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
               <h4 className="pt-[6px] pb-[6px] pl-[15px] pr-[15px] text-[#2564ce] font-bold cursor-pointer ">
-              Don't have an account?
+                Don't have an account?
               </h4>
             </div>
           </Link>
@@ -151,7 +162,7 @@ const Login = () => {
           alt=""
         />
       </div>
-      </div>
+    </div>
   )
 }
 
