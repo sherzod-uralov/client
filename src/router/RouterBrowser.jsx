@@ -33,7 +33,7 @@ function RouterBrowser() {
             }
           />
           <Route
-            path="/list"
+            path="/list/:listId"
             element={
               <>
                 <Nav />

@@ -12,13 +12,16 @@ import { BiPrinter } from 'react-icons/bi'
 import { AiOutlineUnorderedList } from 'react-icons/ai'
 import { MdOutlineDriveFileRenameOutline } from 'react-icons/md'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
+import { useUserContext } from '../../context/Context'
 
 const SideBar = () => {
-  const [list, setList] = useState('')
   const [inputValue, setInputValue] = useState('')
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [isRenaming, setIsRenaming] = useState(null)
+  const navigate = useNavigate()
+  const {getData,list,setList} = useUserContext();
   const [editInput, setEditInput] = useState('')
   const [id, setId] = useState('')
   const clikedMenu = (event, id) => {
@@ -65,18 +68,6 @@ const SideBar = () => {
     }
   }
 
-  const getData = async () => {
-    try {
-      const response = await axios.get(`${LINK}/list`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-      setList(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const Edit = async () => {
     try {
@@ -101,11 +92,14 @@ const SideBar = () => {
 
   return (
     <>
-      <div className="sidebar font-poppins font-normal">
+      <div className="sidebar font-poppins font-normal pt-10">
         <div className="flex flex-col justify-between">
           <div className="bg-[#ffffff] dark:bg-[#252422] h-screen overflow-x-auto dark:shadow-none fixed left-0 shadow-gray-300 shadow-lg pt-[40px]">
             <RxHamburgerMenu className="ml-5 mb-5 dark:text-white" />
-            <div className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all">
+            <div
+              onClick={() => navigate('/')}
+              className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all"
+            >
               <div className="flex gap-4 items-center">
                 <BsSun className="dark:text-white" />
                 <button className="dark:text-white">My day</button>
@@ -143,7 +137,7 @@ const SideBar = () => {
             <span className="block bg-[#e0dfdd]  w-[265px] opacity-[0.7] m-auto mt-3 h-[1px]"></span>
             <div className="pl-[2px] mt-5 flex flex-col gap-0  h-96">
               {list?.data?.map((e, i) => (
-                <div
+                <div onClick={() => navigate(`/list/${e.list_id}`)}
                   onContextMenu={(event) => clikedMenu(event, e.list_id)}
                   className="flex cursor-pointer items-center py-3 gap-3 dark:hover:bg-[#323130] hover:bg-gray-100 transition-all w-[290px] justify-between px-4"
                   key={i}
