@@ -10,8 +10,15 @@ html {
   src: url(../fonts/Poppins-Light.ttf);
 }
 @font-face {
+  font-family: 'poppins-bold';
+  src: url(../fonts/Poppins-Regular.ttf);
+}
+@font-face {
   font-family: 'poppins-regular';
   src: url(../fonts/Poppins-Regular.ttf);
+}
+.poppins-bold {
+  font-family: 'poppins-bold';
 }
 .shadow-custom {
   box-shadow: 0px 1px 13px -5px rgba(90, 100, 107, 0.48);
@@ -45,4 +52,48 @@ input:-webkit-autofill {
   color: #262626;
   font-style: normal;
   font-size: 13px;
+}
+
+input[type='checkbox'] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 50px;
+  border: 1px solid #535353;
+  height: 22px;
+  background: transparent;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+}
+
+label:after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  width: 12px;
+  height: 12px;
+  background: #2564ce;
+  border-radius: 90px;
+  transition: 0.3s;
+}
+
+input:checked + label {
+  background: #2564ce;
+}
+
+input:checked + label:after {
+  left: calc(100% - 5px);
+  background: #faf9f7;
+  transform: translateX(-100%);
+}
+
+label:active:after {
+  width: 20px;
 }
