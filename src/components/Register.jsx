@@ -139,8 +139,8 @@ const Register = () => {
           </form>
           <Link to="/login">
             <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto ">
-              <h4 className="rounded-md border-solid  border-2 pt-[6px] pb-[6px] pl-[15px] pr-[15px] bg-[#2564ce] text-white font-bold ">
-                Login
+              <h4 className=" text-[#2564ce] font-bold cursor-pointer ">
+                Have an account ?
               </h4>
             </div>
           </Link>
