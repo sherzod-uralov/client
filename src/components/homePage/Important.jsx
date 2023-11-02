@@ -1,40 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import { BsSun } from 'react-icons/bs'
+import { AiOutlineEllipsis, AiFillStar } from 'react-icons/ai'
+import { BiSortAlt2 } from 'react-icons/bi'
 import { GoLightBulb } from 'react-icons/go'
 import { CgRadioCheck } from 'react-icons/cg'
-import { useUserContext } from '../context/Context'
-import { AiOutlineStar,AiFillDelete,AiOutlineEllipsis} from 'react-icons/ai'
-import { BiPrinter,BiSortAlt2 } from 'react-icons/bi'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
-import { RxHamburgerMenu } from 'react-icons/rx'
-import {GrStatusGood} from 'react-icons/gr'
-import {AiFillStar} from 'react-icons/ai'
-import { MdOutlineDriveFileRenameOutline ,MdOutlineContentCopy,MdOutlineDateRange} from 'react-icons/md'
+import { MdOutlineDateRange } from 'react-icons/md'
+import { useUserContext } from '../../context/Context'
 import axios from 'axios'
-import { LINK } from '../api/PORT'
+import {RxHamburgerMenu} from 'react-icons/rx'
+import { LINK } from '../../api/PORT'
+import { AiOutlineStar } from 'react-icons/ai'
+import { AiFillDelete } from 'react-icons/ai'
+import { BiPrinter } from 'react-icons/bi'
+import { MdOutlineDriveFileRenameOutline } from 'react-icons/md'
+import { useParams } from 'react-router-dom'
 
-const HomePage = () => {
+const Important = () => {
   const [todo, setTodo] = useState('')
-  const [listTodo, setListTodo] = useState('')
+  const {setImportantCount,menu,importantData:getData,setMEnu,importantTodo:listTodo,setImportantTodo:setListTodo,importantData} = useUserContext();
+  const { listId } = useParams()
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
+  const [hidden, setHidden] = useState(localStorage.getItem('setHidden'))
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [id, setId] = useState('')
-  const [ copyMenu, setCopyMenu ] = useState(false); 
-  const { menu, setMEnu,importantData,getData:sideBar,importantCount } = useUserContext();
-  const [text,setText] = useState();
 
-  if(copyMenu == true){
-    setTimeout(() => {
-      setCopyMenu(false);
-    }, 1000);
-  }
-  const clikedMenu = (event,id,text) => {
-    setText(text)
-    setId(id)
+  const clikedMenu = (event, id) => {
     event.preventDefault()
+    setId(id)
     setContextMenuVisible(true)
     setContextMenuPosition({ x: event.clientX, y: event.clientY })
   }
+
+  const checkInportant = async (id) => {
+    try {
+      await axios.put(
+        `${LINK}/todo/${id}`,
+        { important: false ,task:true},
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      )
+      getData()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   document.addEventListener('click', () => {
     setContextMenuVisible(false)
@@ -48,47 +62,12 @@ const HomePage = () => {
         },
       })
       getData()
-      importantData()
-      sideBar()
     } catch (error) {
       console.log(error)
     }
   }
 
-  const markImportant = async (id, important) => {
-    try {
-      await axios.put(
-        `${LINK}/todo/${id}`,
-        { important: !important },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      )
-      getData()
-      sideBar()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  
-
-
-  const getData = async () => {
-    try {
-      const response = await axios.get(`${LINK}/todo`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-      setListTodo(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const addMyday = async () => {
+  const addTodo = async () => {
     if (todo.trim() == '') {
       return false
     }
@@ -96,7 +75,7 @@ const HomePage = () => {
       const response = await axios.post(
         `${LINK}/todo`,
         {
-          my_day: true,
+          important: true,
           task:true,
           list_todo: todo,
         },
@@ -106,74 +85,59 @@ const HomePage = () => {
           },
         },
       )
-      getData();
-      importantData();
-      sideBar()
+
       setTodo('')
+      getData()
     } catch (error) {
       console.log(error)
     }
   }
 
+  const newData = listTodo?.data?.filter((e) => e.important === true);
+  
+
+  setImportantCount(newData?.length)
+
   useEffect(() => {
-    getData()
-  }, [])
-
-  const newData = listTodo?.data?.filter((e) => e?.my_day === true)
-
-  const currentDate = new Date()
-  const [hidden, setHidden] = useState(localStorage.getItem('setHidden'))
-  const formattedDate = `${currentDate.toLocaleString('en-US', {
-    weekday: 'long',
-  })}, ${currentDate.toLocaleString('en-US', {
-    month: 'long',
-  })} ${currentDate.getDate()}`
+    getData() 
+    importantData()
+  }, [listId])
 
   return (
-    <div
-      className={`pt-16 ${!menu ? 'md:ml-[292px]' : 'md:ml-0'} ${
-       'ml-0'
-      } px-6 day w-full  dark:bg-[#11100e]`}>
-      <div className={`absolute flex items-center gap-2 bg-green-500 py-2 px-3 transition ${copyMenu ? 'top-30' : 'top-[-50%]'}  rounded-sm' style={{ left: '50%', transform: 'translate(-50%)}}`}>
-        <GrStatusGood className='dark:fill-white'/>
-        <h2 className='dark:text-white'>Last response copied to clipboard</h2>
-      </div>
+    <div  className={`pt-16 ${!menu ? 'md:ml-[292px]' : 'md:ml-0'} ${
+      'ml-0'
+     } px-6 day w-full  dark:bg-[#11100e]`}>
       <div className="flex justify-between items-center">
         <div>
           <div className="flex items-center gap-3">
-            <RxHamburgerMenu
+          <RxHamburgerMenu
               onClick={() => setMEnu(!menu)}
               className={` dark:text-white ${menu ? 'block' : 'hidden'}`}
             />
-            <BsSun
+            <AiOutlineStar
               className={` ${
                 menu ? 'hidden' : 'block'
               } text-[20px] dark:text-white`}
             />
-            <h3 className="font-extrabold text-[22px] dark:text-white">
-              My day
+            <h3 className="font-extrabold text-[18px] text-[#2765cf]">
+              Important
             </h3>
-            <AiOutlineEllipsis className="text-[20px] dark:text-white" />
+            <AiOutlineEllipsis className="text-[25px] text-[#2765cf]" />
+            <div className="dark:text-white"></div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
-            <BiSortAlt2 className="text-2xl text-[#605e5c] dark:text-white" />
-            <h3 className="font-light text-xs text-[#605e5c] dark:text-white">
-              Sort
-            </h3>
+            <BiSortAlt2 className="text-2xl text-[#2765cf]" />
+            <h3 className="font-light text-xs text-[#2765cf]">Sort</h3>
           </div>
           <div className="flex items-center gap-1">
-            <GoLightBulb className="text-2xl text-[#605e5c] dark:text-white" />
-            <h3 className="font-light text-xs text-[#605e5c] dark:text-white">
-              Suggestion
-            </h3>
+            <GoLightBulb className="text-2xl text-[#2765cf]" />
+            <h3 className="font-light text-xs text-[#2765cf]">Suggestion</h3>
           </div>
         </div>
       </div>
-      <span className="font-extrabold text-[12px] opacity-[0.5] dark:text-white dark:opacity-[0.8]">
-        {formattedDate}
-      </span>
+
       <div className="mt-8 relative flex items-center">
         <CgRadioCheck className="left-2 absolute text-blue-500 text-xl" />
         <input
@@ -183,7 +147,7 @@ const HomePage = () => {
           type="text"
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              addMyday()
+              addTodo()
             }
           }}
           onClick={() => {
@@ -210,20 +174,22 @@ const HomePage = () => {
       <div className="mt-3 flex flex-col gap-2">
         {newData?.map((e) => (
           <div
-            onContextMenu={(event) => clikedMenu(event, e.todo_id,e.list_todo)}
-            className="rounded-md relative  bg-white dark:bg-[#252422] h-[55px] flex items-center"
-            key={e.id}
+            onContextMenu={(event) => clikedMenu(event, e.todo_id)}
+            className="rounded-md relative shadow-md  bg-white dark:bg-[#252422] h-[55px] flex items-center"
+            key={e.todo_id}
           >
             <div className="flex items-center w-full px-4 justify-between">
               <div className="flex gap-2 items-center">
                 <CgRadioCheck className="left-2 text-blue-500 text-xl" />
                 <h2 className="text-black dark:text-white">{e.list_todo}</h2>
               </div>
-              {e.important ? (
-                  <AiFillStar onClick={() => markImportant(e.todo_id,e.important)} className="text-[#316cd0] text-xl" />
+              <div onClick={() => checkInportant(e.todo_id)}>
+                {e.important ? (
+                  <AiFillStar className="text-[#316cd0] text-xl" />
                 ) : (
-                  <AiOutlineStar onClick={() => markImportant(e.todo_id,e.important)} className="text-[#316cd0] text-xl" />
+                  <AiOutlineStar className="text-[#316cd0] text-xl" />
                 )}
+              </div>
             </div>
           </div>
         ))}
@@ -242,21 +208,13 @@ const HomePage = () => {
                   Reneme
                 </span>
               </div>
-
+  
               <div className="cursor-pointer flex items-center dark:hover:bg-[#323130] hover:bg-slate-100 transition-all gap-2 pl-2">
                 <BiPrinter className="text-[23px] text-[#605e5c] dark:text-white" />
                 <span className="py-2 text-[#605e5c] dark:text-white">
                   Print
                 </span>
               </div>
-              <CopyToClipboard text={text}>
-              <div onClick={() => setCopyMenu(true)} className="cursor-pointer flex items-center dark:hover:bg-[#323130] hover:bg-slate-100 transition-all gap-2 pl-2">
-                <MdOutlineContentCopy className="text-[23px] text-[#605e5c] dark:text-white" />
-                <span className="py-2 text-[#605e5c] dark:text-white">
-                  Copy
-                </span>
-              </div>
-              </CopyToClipboard>
               <span className="block h-[1px] w-full bg-black opacity-[0.2]"></span>
               <div
                 onClick={() => deleteList(id)}
@@ -275,4 +233,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default Important

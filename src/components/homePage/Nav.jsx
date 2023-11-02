@@ -25,9 +25,9 @@ const Nav = () => {
   }
 
   const handleSwitchMode = (e) => {
-    const newMode = darkMode === 'dark' ? 'light' : 'dark';
-    setDarkMode(newMode);
-    localStorage.setItem('darkmode', newMode);
+    const newMode = darkMode === 'dark' ? 'light' : 'dark'
+    setDarkMode(newMode)
+    localStorage.setItem('darkmode', newMode)
   }
 
   useEffect(() => {
@@ -49,12 +49,16 @@ const Nav = () => {
       <div className="container">
         <div className="flex justify-between items-center">
           <div className="flex text-white items-center gap-6">
-            <MdOutlineApps className = 'text-black dark:text-white text-xl'/>
+            <MdOutlineApps className="text-black dark:text-white text-xl" />
             <h3 className="font-medium">To Do</h3>
+            <input
+              type="text"
+              className="dark:bg-[#252422] w-9 block md:hidden h-8 rounded-[3px] outline-none pl-2"
+            />
           </div>
           <input
             type="text"
-            className="dark:bg-[#252422] w-96 h-8 rounded-[3px] outline-none pl-2"
+            className="dark:bg-[#252422] w-80 hidden md:block h-8 rounded-[3px] outline-none pl-2"
           />
           <div className="flex items-center gap-1">
             <RiSettings5Line
@@ -94,12 +98,19 @@ const Nav = () => {
         <span className="block pt-7 font-black dark:text-white">General</span>
         <div className="pt-7 ">
           <span className="dark:text-white">Turn on night mode</span>
-          <div className='flex gap-3 items-center pt-5'>
-          <div className='flex items-center'>
-          <input onChange={handleSwitchMode} checked = {darkMode == 'dark'} type="checkbox" id="switch" />
-          <label for="switch">Toggle</label>
-          </div>
-          <p className='text-black dark:text-white text-lg'>{darkMode == "dark" ? 'on' : 'off'}</p>
+          <div className="flex gap-3 items-center pt-5">
+            <div className="flex items-center">
+              <input
+                onChange={handleSwitchMode}
+                checked={darkMode == 'dark'}
+                type="checkbox"
+                id="switch"
+              />
+              <label htmlFor="switch">Toggle</label>
+            </div>
+            <p className="text-black dark:text-white text-lg">
+              {darkMode == 'dark' ? 'on' : 'off'}
+            </p>
           </div>
         </div>
       </div>

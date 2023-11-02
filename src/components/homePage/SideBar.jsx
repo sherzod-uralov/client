@@ -21,7 +21,8 @@ const SideBar = () => {
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [isRenaming, setIsRenaming] = useState(null)
   const navigate = useNavigate()
-  const {getData,list,setList} = useUserContext();
+  const { getData, list, setList, menu, setMEnu,importantCount,myDayCount ,importantData} = useUserContext()
+  console.log(importantCount);
   const [editInput, setEditInput] = useState('')
   const [id, setId] = useState('')
   const clikedMenu = (event, id) => {
@@ -68,7 +69,6 @@ const SideBar = () => {
     }
   }
 
-
   const Edit = async () => {
     try {
       await axios.put(
@@ -88,30 +88,41 @@ const SideBar = () => {
 
   useEffect(() => {
     getData()
-  }, [])
+    importantData();
+  }, [importantCount])
 
   return (
     <>
-      <div className="sidebar font-poppins font-normal pt-10">
+      <div
+        className={`sidebar font-poppins font-normal z-20 pt-7 fixed ${
+          !menu ? 'left-0' : 'left-[-100%]'
+        } transition-all`}
+      >
         <div className="flex flex-col justify-between">
-          <div className="bg-[#ffffff] dark:bg-[#252422] h-screen overflow-x-auto dark:shadow-none fixed left-0 shadow-gray-300 shadow-lg pt-[40px]">
-            <RxHamburgerMenu className="ml-5 mb-5 dark:text-white" />
+          <div className="bg-[#ffffff] dark:bg-[#252422] h-screen overflow-x-auto dark:shadow-none  left-0 shadow-gray-300 shadow-lg pt-[40px]">
+            <RxHamburgerMenu
+              onClick={() => setMEnu(!menu)}
+              className="ml-5 mb-5 dark:text-white"
+            />
             <div
               onClick={() => navigate('/')}
-              className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all"
+              className="flex items-center py-3 px-4 justify-between w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all"
             >
               <div className="flex gap-4 items-center">
                 <BsSun className="dark:text-white" />
                 <button className="dark:text-white">My day</button>
               </div>
-              <span></span>
+              <span className='dark:text-white'>{myDayCount}</span>
             </div>
-            <div className="flex items-center justify-between py-3 px-5  w-[290px] dark:hover:bg-[#323130] bg-transparent  hover:bg-gray-100 transition-all">
+            <div
+              onClick={() => navigate('/important')}
+              className="flex items-center justify-between py-3 px-4  w-[290px] dark:hover:bg-[#323130] bg-transparent  hover:bg-gray-100 transition-all"
+            >
               <div className="flex gap-4 items-center">
                 <AiOutlineStar className="dark:text-white" />
                 <button className="dark:text-white">Important</button>
               </div>
-              <span></span>
+              <span className='dark:text-white'>{importantCount}</span>
             </div>
             <div className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130]  hover:bg-gray-100 transition-all">
               <div className="flex gap-4 items-center">
@@ -120,7 +131,7 @@ const SideBar = () => {
               </div>
               <span></span>
             </div>
-            <div className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all">
+            <div onClick={ () => navigate('/task')} className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all">
               <div className="flex gap-4 items-center dark:text-white">
                 <BiHomeAlt2 className="dark:text-white" />
                 <button>Tasks</button>
@@ -137,7 +148,8 @@ const SideBar = () => {
             <span className="block bg-[#e0dfdd]  w-[265px] opacity-[0.7] m-auto mt-3 h-[1px]"></span>
             <div className="pl-[2px] mt-5 flex flex-col gap-0  h-96">
               {list?.data?.map((e, i) => (
-                <div onClick={() => navigate(`/list/${e.list_id}`)}
+                <div
+                  onClick={() => navigate(`/list/${e.list_id}`)}
                   onContextMenu={(event) => clikedMenu(event, e.list_id)}
                   className="flex cursor-pointer items-center py-3 gap-3 dark:hover:bg-[#323130] hover:bg-gray-100 transition-all w-[290px] justify-between px-4"
                   key={i}
@@ -166,7 +178,7 @@ const SideBar = () => {
                       ''
                     )}
                   </div>
-                  <span className="text-[12px] font-bold">
+                  <span className="text-[12px] font-bold dark:text-white">
                     {e?.List_todos?.length === 0 ? '' : e?.List_todos?.length}
                   </span>
                 </div>
@@ -199,7 +211,7 @@ const SideBar = () => {
       </div>
       {contextMenuVisible && (
         <div
-          className="context-menu absolute transition-colors"
+          className="context-menu absolute transition-colors z-50"
           style={{ top: contextMenuPosition.y, left: contextMenuPosition.x }}
         >
           <div className="flex bg-white dark:bg-[#252422] dark:shadow-custom-dark shadow-custom flex-col w-36 rounded-[4px] h-30 transition-colors">
