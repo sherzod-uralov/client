@@ -85,7 +85,7 @@ const Userprofile = () => {
         </form>
         <button onClick={() => {
             localStorage.clear()
-            window.location.reload();
+            navigate('/welcome');
         }} className='absolute bottom-0 left-0 px-5 py-2 rounded-sm bg-green-400'>sign out</button>
       </div>
     </div>
