@@ -69,10 +69,7 @@ const Register = () => {
         email,
       })
 
-      console.log(response)
-      if (response.status == 200 && response.statusText == 'OK') {
         navigate('/verify')
-      }
     } catch (error) {
       console.log(error)
     }
@@ -84,17 +81,17 @@ const Register = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen justify-between">
-       <div className="flex justify-between items-center pt-5 md:mt-8 md:hidden">
-          <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
-          <div style={{ width: '120px' }}>
-            <Select
-            className='pr-3'
-              options={options}
-              components={{ Option: CustomOption }}
-              defaultInputValue={options[0].label}
-            />
-          </div>
+      <div className="flex justify-between items-center pt-5 md:mt-8 md:hidden">
+        <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
+        <div style={{ width: '120px' }}>
+          <Select
+            className="pr-3"
+            options={options}
+            components={{ Option: CustomOption }}
+            defaultInputValue={options[0].label}
+          />
         </div>
+      </div>
       <div className="w-full md:w-1/2 p-5 md:pl-10 md:pr-10 md:pt-10  items-center ">
         <div className="md:flex hidden justify-between items-center md:mt-8">
           <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
@@ -156,7 +153,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value.trim())}
             />
-            <span className="text-red-500">
+            <span className="text-red-500 block m-auto">
               {find ? 'email alredy exist' : ''}
             </span>
             <button className="border-gray-200 text-white font-bold border-2 border-solid block m-auto w-full max-w-[580px] py-[20px] rounded-full  bg-[#2564ce]">

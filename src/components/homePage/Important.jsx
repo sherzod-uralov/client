@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { BsSun } from 'react-icons/bs'
-import { AiOutlineEllipsis, AiFillStar } from 'react-icons/ai'
+import {
+  AiOutlineEllipsis,
+  AiFillStar,
+  AiFillCheckCircle,
+} from 'react-icons/ai'
 import { BiSortAlt2 } from 'react-icons/bi'
 import { GoLightBulb } from 'react-icons/go'
 import { CgRadioCheck } from 'react-icons/cg'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { useUserContext } from '../../context/Context'
 import axios from 'axios'
-import {RxHamburgerMenu} from 'react-icons/rx'
+import { RxHamburgerMenu } from 'react-icons/rx'
 import { LINK } from '../../api/PORT'
 import { AiOutlineStar } from 'react-icons/ai'
 import { AiFillDelete } from 'react-icons/ai'
@@ -17,7 +21,15 @@ import { useParams } from 'react-router-dom'
 
 const Important = () => {
   const [todo, setTodo] = useState('')
-  const {setImportantCount,menu,importantData:getData,setMEnu,importantTodo:listTodo,setImportantTodo:setListTodo,importantData} = useUserContext();
+  const {
+    setImportantCount,
+    menu,
+    importantData: getData,
+    setMEnu,
+    importantTodo: listTodo,
+    setImportantTodo: setListTodo,
+    importantData,
+  } = useUserContext()
   const { listId } = useParams()
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
   const [hidden, setHidden] = useState(localStorage.getItem('setHidden'))
@@ -35,7 +47,7 @@ const Important = () => {
     try {
       await axios.put(
         `${LINK}/todo/${id}`,
-        { important: false ,task:true},
+        { important: false, task: true },
         {
           headers: {
             Authorization: localStorage.getItem('token'),
@@ -48,7 +60,24 @@ const Important = () => {
     }
   }
 
-
+  const completed = async (id, completed) => {
+    try {
+      await axios.put(
+        `${LINK}/todo/${id}`,
+        {
+          completed: !completed,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      )
+      getData()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   document.addEventListener('click', () => {
     setContextMenuVisible(false)
@@ -76,7 +105,7 @@ const Important = () => {
         `${LINK}/todo`,
         {
           important: true,
-          task:true,
+          task: true,
           list_todo: todo,
         },
         {
@@ -93,31 +122,32 @@ const Important = () => {
     }
   }
 
-  const newData = listTodo?.data?.filter((e) => e.important === true);
-  
+  const newData = listTodo?.data?.filter((e) => e.important === true)
 
   setImportantCount(newData?.length)
 
   useEffect(() => {
-    getData() 
+    getData()
     importantData()
   }, [listId])
 
   return (
-    <div  className={`pt-16 ${!menu ? 'md:ml-[292px]' : 'md:ml-0'} ${
-      'ml-0'
-     } px-6 day w-full  dark:bg-[#11100e]`}>
+    <div
+      className={`pt-16 ${
+        !menu ? 'md:ml-[292px]' : 'md:ml-0'
+      } ${'ml-0'} px-6 day w-full  dark:bg-[#11100e]`}
+    >
       <div className="flex justify-between items-center">
         <div>
           <div className="flex items-center gap-3">
-          <RxHamburgerMenu
+            <RxHamburgerMenu
               onClick={() => setMEnu(!menu)}
               className={` dark:text-white ${menu ? 'block' : 'hidden'}`}
             />
             <AiOutlineStar
               className={` ${
                 menu ? 'hidden' : 'block'
-              } text-[20px] dark:text-white`}
+              } text-[20px] dark:text-white text-[#2765cf] fill-[#2765cf]`}
             />
             <h3 className="font-extrabold text-[18px] text-[#2765cf]">
               Important
@@ -180,8 +210,18 @@ const Important = () => {
           >
             <div className="flex items-center w-full px-4 justify-between">
               <div className="flex gap-2 items-center">
-                <CgRadioCheck className="left-2 text-blue-500 text-xl" />
-                <h2 className="text-black dark:text-white">{e.list_todo}</h2>
+                <div onClick={() => completed(e.todo_id, e.completed)}>
+                  {e.completed ? (
+                    <AiFillCheckCircle className="left-2 text-blue-500 text-xl" />
+                  ) : (
+                    <CgRadioCheck className="left-2 text-blue-500 text-xl" />
+                  )}
+                </div>
+                <h2
+                  className={`text-black dark:text-white ${
+                    e.completed ? 'line-through' : ''
+                  } transition-all`}
+                >{e.list_todo}</h2>
               </div>
               <div onClick={() => checkInportant(e.todo_id)}>
                 {e.important ? (
@@ -208,7 +248,7 @@ const Important = () => {
                   Reneme
                 </span>
               </div>
-  
+
               <div className="cursor-pointer flex items-center dark:hover:bg-[#323130] hover:bg-slate-100 transition-all gap-2 pl-2">
                 <BiPrinter className="text-[23px] text-[#605e5c] dark:text-white" />
                 <span className="py-2 text-[#605e5c] dark:text-white">

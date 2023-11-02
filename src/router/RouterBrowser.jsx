@@ -11,7 +11,8 @@ import List from '../components/homePage/List'
 import NotFound from '../utils/NotFound'
 import Important from '../components/homePage/Important'
 import Task from '../components/homePage/Tasks'
-
+import Completed from '../components/homePage/Completed'
+import Userprofile from '../components/homePage/Userprofile'
 function RouterBrowser() {
   const token = localStorage.getItem('token')
   return (
@@ -22,6 +23,7 @@ function RouterBrowser() {
         <Route path="/verify" element={<Verify />} />
         <Route path="/welcome" element={<WelcomePage />} />
         <Route element={<PrivateRoute />}>
+          <Route path="/profile" element={<Userprofile />} />
           <Route
             path="/"
             element={
@@ -58,7 +60,7 @@ function RouterBrowser() {
               </>
             }
           />
-           <Route
+          <Route
             path="/task"
             element={
               <>
@@ -66,6 +68,18 @@ function RouterBrowser() {
                 <div className="flex">
                   <SideBar />
                   <Task />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/completed"
+            element={
+              <>
+                <Nav />
+                <div className="flex">
+                  <SideBar />
+                  <Completed />
                 </div>
               </>
             }

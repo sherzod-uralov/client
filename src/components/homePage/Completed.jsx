@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from 'react'
-import { BsSun } from 'react-icons/bs'
 import {
   AiOutlineEllipsis,
   AiFillStar,
+  AiOutlineCheckCircle,
   AiFillCheckCircle,
 } from 'react-icons/ai'
-import { BiHomeAlt2, BiSortAlt2 } from 'react-icons/bi'
+import { BiSortAlt2 } from 'react-icons/bi'
 import { GoLightBulb } from 'react-icons/go'
 import { CgRadioCheck } from 'react-icons/cg'
 import { MdOutlineDateRange } from 'react-icons/md'
 import { useUserContext } from '../../context/Context'
 import axios from 'axios'
+import { RxHamburgerMenu } from 'react-icons/rx'
 import { LINK } from '../../api/PORT'
 import { AiOutlineStar } from 'react-icons/ai'
 import { AiFillDelete } from 'react-icons/ai'
 import { BiPrinter } from 'react-icons/bi'
 import { MdOutlineDriveFileRenameOutline } from 'react-icons/md'
-import { useParams } from 'react-router-dom'
-import { RxHamburgerMenu } from 'react-icons/rx'
 
-const Important = () => {
-  const [todo, setTodo] = useState('')
+const Completed = () => {
   const {
-    setMEnu,
-    importantData: getData,
-    importantTodo: listTodo,
+    setImportantCount,
     menu,
+    setMEnu,
+    importantTodo: listTodo,
     setImportantTodo: setListTodo,
     importantData,
   } = useUserContext()
-  const { listId } = useParams()
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
-  const [hidden, setHidden] = useState(localStorage.getItem('setHidden'))
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [id, setId] = useState('')
+
+  const getData = async () => {
+    try {
+      const response = await axios.get(`${LINK}/todo`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const clikedMenu = (event, id) => {
     event.preventDefault()
@@ -42,92 +50,17 @@ const Important = () => {
     setContextMenuPosition({ x: event.clientX, y: event.clientY })
   }
 
-  const checkInportant = async (id, important) => {
-    try {
-      await axios.put(
-        `${LINK}/todo/${id}`,
-        { important: !important },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      )
-      getData()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const completed = async (id, completed) => {
-    try {
-      await axios.put(
-        `${LINK}/todo/${id}`,
-        {
-          completed: !completed,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      )
-      getData()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   document.addEventListener('click', () => {
     setContextMenuVisible(false)
   })
 
-  const deleteList = async (id) => {
-    try {
-      await axios.delete(`${LINK}/todo/${id}`, {
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-      })
-      getData()
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const newData = listTodo?.data?.filter((e) => e.completed === true)
 
-  const addTodo = async () => {
-    if (todo.trim() == '') {
-      return false
-    }
-    try {
-      const response = await axios.post(
-        `${LINK}/todo`,
-        {
-          task: true,
-          list_todo: todo,
-        },
-        {
-          headers: {
-            Authorization: localStorage.getItem('token'),
-          },
-        },
-      )
-
-      setTodo('')
-      getData()
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const newData = listTodo?.data?.filter((e) => e.task === true)
-
-  console.log(newData)
+  setImportantCount(newData?.length)
 
   useEffect(() => {
     getData()
-    importantData()
-  }, [listId])
+  }, [])
 
   return (
     <div
@@ -142,14 +75,16 @@ const Important = () => {
               onClick={() => setMEnu(!menu)}
               className={` dark:text-white ${menu ? 'block' : 'hidden'}`}
             />
-            <BiHomeAlt2
+            <AiOutlineCheckCircle
               className={` ${
                 menu ? 'hidden' : 'block'
-              } text-[20px] dark:text-white text-[#2765cf]`}
+              } text-[20px] dark:text-white text-[#2765cf] fill-[#2765cf]`}
             />
-            <h3 className="font-extrabold text-[18px] text-[#2765cf]">Task</h3>
+            <h3 className="font-extrabold text-[18px] text-[#2765cf]">
+              Completed
+            </h3>
             <AiOutlineEllipsis className="text-[25px] text-[#2765cf]" />
-            <div className="dark:text-white w-16"></div>
+            <div className="dark:text-white"></div>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -163,50 +98,16 @@ const Important = () => {
           </div>
         </div>
       </div>
-
-      <div className="mt-8 relative flex items-center">
-        <CgRadioCheck className="left-2 absolute text-blue-500 text-xl" />
-        <input
-          required
-          value={todo}
-          onChange={(e) => setTodo(e.target.value)}
-          type="text"
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              addTodo()
-            }
-          }}
-          onClick={() => {
-            setHidden(true)
-          }}
-          placeholder="Add a task"
-          className="placeholder:text-[#2765cf] placeholder:text-[13px] pl-10 w-full dark:text-white dark:bg-[#252422] bg-white min-h-[55px] rounded-sm shadow-gray-200 dark:shadow-none shadow-lg outline-none text-lg"
-        />
-      </div>
-      <div
-        className={`flex justify-between px-4 items-center w-full h-12 dark:bg-[#252422] bg-[#faf9f7] relative z-[-30] dark:shadow-none ${
-          hidden ? 'top-[3px] z-20' : 'top-[-45px]'
-        } transition-all rounded-sm shadow-gray-200 shadow-lg`}
-      >
-        <MdOutlineDateRange className="dark:text-white" />
-        <button
-          className={`${
-            todo == '' ? 'cursor-not-allowed' : 'cursor-pointer'
-          }  px-[5px] py-[3px] border-solid dark:text-white dark:border-gray-50 border-gray-500 opacity-[0.3] border-[1.5px]`}
-        >
-          add
-        </button>
-      </div>
       <div className="mt-3 flex flex-col gap-2">
         {newData?.map((e) => (
           <div
-            onContextMenu={(event) => clikedMenu(event, e.todo_id)}
+
             className="rounded-md relative shadow-md  bg-white dark:bg-[#252422] h-[55px] flex items-center"
             key={e.todo_id}
           >
             <div className="flex items-center w-full px-4 justify-between">
               <div className="flex gap-2 items-center">
-                <div onClick={() => completed(e.todo_id, e.completed)}>
+                <div>
                   {e.completed ? (
                     <AiFillCheckCircle className="left-2 text-blue-500 text-xl" />
                   ) : (
@@ -217,14 +118,9 @@ const Important = () => {
                   className={`text-black dark:text-white ${
                     e.completed ? 'line-through' : ''
                   } transition-all`}
-                >{e.list_todo}</h2>
-              </div>
-              <div onClick={() => checkInportant(e.todo_id, e.important)}>
-                {e.important ? (
-                  <AiFillStar className="text-[#316cd0] text-xl" />
-                ) : (
-                  <AiOutlineStar className="text-[#316cd0] text-xl" />
-                )}
+                >
+                  {e.list_todo}
+                </h2>
               </div>
             </div>
           </div>
@@ -269,4 +165,4 @@ const Important = () => {
   )
 }
 
-export default Important
+export default Completed

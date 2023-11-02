@@ -10,9 +10,9 @@ export function UserProvider({ children }) {
   const [listTodo, setListTodo] = useState('')
   const [importantTodo, setImportantTodo] = useState('')
   const [menu, setMEnu] = useState(false)
-  const [importantCount, setImportantCount] = useState(0);
-  const [myDayCount, setMyDayCount] = useState(0);
-  
+  const [importantCount, setImportantCount] = useState(0)
+  const [myDayCount, setMyDayCount] = useState(0)
+console.log(list);
   function validateEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return regex.test(email)
@@ -25,6 +25,18 @@ export function UserProvider({ children }) {
         },
       })
       setList(response.data)
+    } catch (error) { 
+      console.log(error)
+    }
+  }
+
+  const completedData = async () => {
+    try {
+      const response = await axios.get(`${LINK}/todo`, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      })
     } catch (error) {
       console.log(error)
     }
@@ -47,6 +59,7 @@ export function UserProvider({ children }) {
     <UserContext.Provider
       value={{
         user,
+        completedData,
         menu,
         importantData,
         importantCount,

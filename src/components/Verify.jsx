@@ -1,76 +1,76 @@
-import axios from 'axios'
-import React, { useState } from 'react'
-import { LINK } from '../api/PORT'
-import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useUserContext } from '../context/Context'
+import axios from 'axios';
+import React, { useState } from 'react';
+import { LINK } from '../api/PORT';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useUserContext } from '../context/Context';
 
 const EmailVerification = () => {
-  const { setToken, token } = useUserContext()
-  const navigate = useNavigate()
-  const [verificationCode, setVerificationCode] = useState([
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-  ])
-  const [error, setError] = useState('')
+  const { setToken, token } = useUserContext();
+  const navigate = useNavigate();
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', '']);
+  const [error, setError] = useState('');
+  const [verificationError, setVerificationError] = useState(false);
+
   const onSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (verificationCode.length < 6) {
-      setError(`kod to'liq emas`)
+      setError(`kod to'liq emas`);
+      setVerificationError(true);
     } else {
       const response = await axios.post(`${LINK}/verify`, {
         code: Number(verificationCode.join('')),
-      })
-      console.log(response.data.token)
+      });
+      console.log(response.data.token);
       if (response.status === 201) {
-        setToken(response.data.token)
-        localStorage.setItem('token', response.data.token)
-        navigate('/')
+        setToken(response.data.token);
+        localStorage.setItem('token', response.data.token);
+        navigate('/');
+      } else {
+        setError('Incorrect verification code');
+        setVerificationError(true);
       }
-      console.log(response)
+      console.log(response);
     }
-  }
+  };
 
   const handleInputChange = (index, e) => {
-    const value = e.target.value
+    const value = e.target.value;
 
     if (/^\d+$/.test(value) && value.length <= 1) {
-      const newCode = [...verificationCode]
-      newCode[index] = value
+      const newCode = [...verificationCode];
+      newCode[index] = value;
 
       if (index < 5 && value !== '') {
-        document.getElementById(`code-input-${index + 1}`).focus()
+        document.getElementById(`code-input-${index + 1}`).focus();
       }
 
-      setVerificationCode(newCode)
+      setVerificationCode(newCode);
+      setVerificationError(false);
     } else if (value === '' && index > 0) {
-      const newCode = [...verificationCode]
-      newCode[index] = ''
-      setVerificationCode(newCode)
+      const newCode = [...verificationCode];
+      newCode[index] = '';
+      setVerificationCode(newCode);
 
       if (index > 0) {
-        document.getElementById(`code-input-${index - 1}`).focus()
+        document.getElementById(`code-input-${index - 1}`).focus();
       }
     } else if (value === '' && index === 0) {
-      const newCode = [...verificationCode]
-      newCode[index] = ''
-      setVerificationCode(newCode)
+      const newCode = [...verificationCode];
+      newCode[index] = '';
+      setVerificationCode(newCode);
     }
-  }
+  };
 
   const handleKeyDown = (index, e) => {
     if (e.keyCode === 37 && index >= 0) {
-      e.preventDefault()
-      document.getElementById(`code-input-${index - 1}`).focus()
+      e.preventDefault();
+      document.getElementById(`code-input-${index - 1}`).focus();
     } else if (e.keyCode === 39 && index < 5) {
-      e.preventDefault()
-      document.getElementById(`code-input-${index + 1}`).focus()
+      e.preventDefault();
+      document.getElementById(`code-input-${index + 1}`).focus();
     }
-  }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen">
@@ -93,7 +93,9 @@ const EmailVerification = () => {
                   value={digit}
                   onChange={(e) => handleInputChange(index, e)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className="w-10 h-10 text-2xl text-center border border-gray-300 rounded"
+                  className={`w-10 h-10 text-2xl text-center border ${
+                    verificationError ? 'border-red-500 animate-shake' : 'border-gray-300'
+                  } rounded`}
                 />
               ))}
             </div>
@@ -105,7 +107,7 @@ const EmailVerification = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EmailVerification
+export default EmailVerification;

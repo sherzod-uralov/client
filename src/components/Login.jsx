@@ -56,9 +56,9 @@ const Login = () => {
       }
     }
   }
-//salom
+  //salom
   const ceckPaswd = () => {
-    if (password.length == 0) { 
+    if (password.length == 0) {
       return 'border-gray-200'
     }
     if (password.length < 8 || error?.response?.data?.msg == 'wrong password') {
@@ -149,7 +149,7 @@ const Login = () => {
           <Link to="/register">
             <div className="flex gap-3 items-center mt-3 md:max-w-[580px] m-auto">
               <h4 className="pt-[6px] pb-[6px] pl-[15px] pr-[15px] text-[#2564ce] font-normal ">
-              Don't have an account?
+                Don't have an account?
               </h4>
             </div>
           </Link>

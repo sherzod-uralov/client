@@ -3,32 +3,47 @@ import { BsSun } from 'react-icons/bs'
 import { GoLightBulb } from 'react-icons/go'
 import { CgRadioCheck } from 'react-icons/cg'
 import { useUserContext } from '../context/Context'
-import { AiOutlineStar,AiFillDelete,AiOutlineEllipsis} from 'react-icons/ai'
-import { BiPrinter,BiSortAlt2 } from 'react-icons/bi'
-import {CopyToClipboard} from 'react-copy-to-clipboard';
+import {
+  AiOutlineStar,
+  AiFillDelete,
+  AiOutlineEllipsis,
+  AiFillCheckCircle,
+} from 'react-icons/ai'
+import { BiPrinter, BiSortAlt2 } from 'react-icons/bi'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { RxHamburgerMenu } from 'react-icons/rx'
-import {GrStatusGood} from 'react-icons/gr'
-import {AiFillStar} from 'react-icons/ai'
-import { MdOutlineDriveFileRenameOutline ,MdOutlineContentCopy,MdOutlineDateRange} from 'react-icons/md'
+import { GrStatusGood } from 'react-icons/gr'
+import { AiFillStar } from 'react-icons/ai'
+import {
+  MdOutlineDriveFileRenameOutline,
+  MdOutlineContentCopy,
+  MdOutlineDateRange,
+} from 'react-icons/md'
 import axios from 'axios'
 import { LINK } from '../api/PORT'
-
+const sound = new Audio('../sound/sound.mp3')
 const HomePage = () => {
   const [todo, setTodo] = useState('')
   const [listTodo, setListTodo] = useState('')
   const [contextMenuVisible, setContextMenuVisible] = useState(false)
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [id, setId] = useState('')
-  const [ copyMenu, setCopyMenu ] = useState(false); 
-  const { menu, setMEnu,importantData,getData:sideBar,importantCount } = useUserContext();
-  const [text,setText] = useState();
+  const [copyMenu, setCopyMenu] = useState(false)
+  const {
+    menu,
+    setMEnu,
+    importantData,
+    getData: sideBar,
+    importantCount,
+  } = useUserContext()
+  const [text, setText] = useState()
 
-  if(copyMenu == true){
+  if (copyMenu == true) {
     setTimeout(() => {
-      setCopyMenu(false);
-    }, 1000);
+      setCopyMenu(false)
+    }, 1000)
   }
-  const clikedMenu = (event,id,text) => {
+  const clikedMenu = (event, id, text) => {
     setText(text)
     setId(id)
     event.preventDefault()
@@ -39,6 +54,27 @@ const HomePage = () => {
   document.addEventListener('click', () => {
     setContextMenuVisible(false)
   })
+
+  const completed = async (id, completed) => {
+    try {
+      await axios.put(
+        `${LINK}/todo/${id}`,
+        {
+          completed: !completed,
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        },
+      )
+      getData()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      sound.play()
+    }
+  }
 
   const deleteList = async (id) => {
     try {
@@ -72,8 +108,6 @@ const HomePage = () => {
       console.log(error)
     }
   }
-  
-
 
   const getData = async () => {
     try {
@@ -97,7 +131,7 @@ const HomePage = () => {
         `${LINK}/todo`,
         {
           my_day: true,
-          task:true,
+          task: true,
           list_todo: todo,
         },
         {
@@ -106,8 +140,8 @@ const HomePage = () => {
           },
         },
       )
-      getData();
-      importantData();
+      getData()
+      importantData()
       sideBar()
       setTodo('')
     } catch (error) {
@@ -131,12 +165,17 @@ const HomePage = () => {
 
   return (
     <div
-      className={`pt-16 ${!menu ? 'md:ml-[292px]' : 'md:ml-0'} ${
-       'ml-0'
-      } px-6 day w-full  dark:bg-[#11100e]`}>
-      <div className={`absolute flex items-center gap-2 bg-green-500 py-2 px-3 transition ${copyMenu ? 'top-30' : 'top-[-50%]'}  rounded-sm' style={{ left: '50%', transform: 'translate(-50%)}}`}>
-        <GrStatusGood className='dark:fill-white'/>
-        <h2 className='dark:text-white'>Last response copied to clipboard</h2>
+      className={`pt-16 ${
+        !menu ? 'md:ml-[292px]' : 'md:ml-0'
+      } ${'ml-0'} px-6 day w-full  dark:bg-[#11100e]`}
+    >
+      <div
+        className={`absolute flex items-center gap-2 bg-green-500 py-2 px-3 transition ${
+          copyMenu ? 'top-30' : 'top-[-50%]'
+        }  rounded-sm' style={{ left: '50%', transform: 'translate(-50%)}}`}
+      >
+        <GrStatusGood className="dark:fill-white" />
+        <h2 className="dark:text-white">Last response copied to clipboard</h2>
       </div>
       <div className="flex justify-between items-center">
         <div>
@@ -210,20 +249,36 @@ const HomePage = () => {
       <div className="mt-3 flex flex-col gap-2">
         {newData?.map((e) => (
           <div
-            onContextMenu={(event) => clikedMenu(event, e.todo_id,e.list_todo)}
+            onContextMenu={(event) => clikedMenu(event, e.todo_id, e.list_todo)}
             className="rounded-md relative  bg-white dark:bg-[#252422] h-[55px] flex items-center"
             key={e.id}
           >
             <div className="flex items-center w-full px-4 justify-between">
               <div className="flex gap-2 items-center">
-                <CgRadioCheck className="left-2 text-blue-500 text-xl" />
-                <h2 className="text-black dark:text-white">{e.list_todo}</h2>
+                <div onClick={() => completed(e.todo_id, e.completed)}>
+                  {e.completed ? (
+                    <AiFillCheckCircle className="left-2 text-blue-500 text-xl" />
+                  ) : (
+                    <CgRadioCheck className="left-2 text-blue-500 text-xl" />
+                  )}
+                </div>
+                <h2
+                  className={`text-black dark:text-white ${
+                    e.completed ? 'line-through' : ''
+                  } transition-all`}
+                >{e.list_todo}</h2>
               </div>
               {e.important ? (
-                  <AiFillStar onClick={() => markImportant(e.todo_id,e.important)} className="text-[#316cd0] text-xl" />
-                ) : (
-                  <AiOutlineStar onClick={() => markImportant(e.todo_id,e.important)} className="text-[#316cd0] text-xl" />
-                )}
+                <AiFillStar
+                  onClick={() => markImportant(e.todo_id, e.important)}
+                  className="text-[#316cd0] text-xl"
+                />
+              ) : (
+                <AiOutlineStar
+                  onClick={() => markImportant(e.todo_id, e.important)}
+                  className="text-[#316cd0] text-xl"
+                />
+              )}
             </div>
           </div>
         ))}
@@ -250,12 +305,15 @@ const HomePage = () => {
                 </span>
               </div>
               <CopyToClipboard text={text}>
-              <div onClick={() => setCopyMenu(true)} className="cursor-pointer flex items-center dark:hover:bg-[#323130] hover:bg-slate-100 transition-all gap-2 pl-2">
-                <MdOutlineContentCopy className="text-[23px] text-[#605e5c] dark:text-white" />
-                <span className="py-2 text-[#605e5c] dark:text-white">
-                  Copy
-                </span>
-              </div>
+                <div
+                  onClick={() => setCopyMenu(true)}
+                  className="cursor-pointer flex items-center dark:hover:bg-[#323130] hover:bg-slate-100 transition-all gap-2 pl-2"
+                >
+                  <MdOutlineContentCopy className="text-[23px] text-[#605e5c] dark:text-white" />
+                  <span className="py-2 text-[#605e5c] dark:text-white">
+                    Copy
+                  </span>
+                </div>
               </CopyToClipboard>
               <span className="block h-[1px] w-full bg-black opacity-[0.2]"></span>
               <div

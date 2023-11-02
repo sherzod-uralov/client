@@ -1,3 +1,3 @@
-const LINK = 'http://192.168.100.116:5700/api'
+const LINK = 'https://todo-micros.onrender.com/api'
 
 export { LINK }

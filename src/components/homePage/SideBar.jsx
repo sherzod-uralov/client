@@ -21,8 +21,17 @@ const SideBar = () => {
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 })
   const [isRenaming, setIsRenaming] = useState(null)
   const navigate = useNavigate()
-  const { getData, list, setList, menu, setMEnu,importantCount,myDayCount ,importantData} = useUserContext()
-  console.log(importantCount);
+  const {
+    getData,
+    list,
+    setList,
+    menu,
+    setMEnu,
+    importantCount,
+    myDayCount,
+    importantData,
+  } = useUserContext()
+  console.log(importantCount)
   const [editInput, setEditInput] = useState('')
   const [id, setId] = useState('')
   const clikedMenu = (event, id) => {
@@ -88,7 +97,7 @@ const SideBar = () => {
 
   useEffect(() => {
     getData()
-    importantData();
+    importantData()
   }, [importantCount])
 
   return (
@@ -112,7 +121,7 @@ const SideBar = () => {
                 <BsSun className="dark:text-white" />
                 <button className="dark:text-white">My day</button>
               </div>
-              <span className='dark:text-white'>{myDayCount}</span>
+              <span className="dark:text-white"></span>
             </div>
             <div
               onClick={() => navigate('/important')}
@@ -122,7 +131,7 @@ const SideBar = () => {
                 <AiOutlineStar className="dark:text-white" />
                 <button className="dark:text-white">Important</button>
               </div>
-              <span className='dark:text-white'>{importantCount}</span>
+              <span className="dark:text-white"></span>
             </div>
             <div className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130]  hover:bg-gray-100 transition-all">
               <div className="flex gap-4 items-center">
@@ -131,14 +140,20 @@ const SideBar = () => {
               </div>
               <span></span>
             </div>
-            <div onClick={ () => navigate('/task')} className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all">
+            <div
+              onClick={() => navigate('/task')}
+              className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all"
+            >
               <div className="flex gap-4 items-center dark:text-white">
                 <BiHomeAlt2 className="dark:text-white" />
                 <button>Tasks</button>
               </div>
               <span></span>
             </div>
-            <div className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all">
+            <div
+              onClick={() => navigate('/completed')}
+              className="flex items-center py-3 px-5  w-[290px] bg-transparent dark:hover:bg-[#323130] hover:bg-gray-100 transition-all"
+            >
               <div className="flex gap-4 items-center dark:text-white">
                 <AiOutlineCheckCircle className="dark:text-white" />
                 <button>Completed</button>
@@ -197,7 +212,7 @@ const SideBar = () => {
                   value={inputValue}
                   type="text"
                   placeholder="new list"
-                  className="outline-none w-[220px] dark:bg-[#252422]"
+                  className="outline-none w-[220px] dark:bg-[#252422] dark:text-white"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       addList()

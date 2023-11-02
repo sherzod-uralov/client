@@ -6,11 +6,13 @@ import { LINK } from '../../api/PORT'
 import { RiSettings5Line } from 'react-icons/ri'
 import { useUserContext } from '../../context/Context'
 import { MdOutlineClear } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
 
 const Nav = () => {
   const [information, setInformation] = useState('')
   const { darkMode, setDarkMode } = useUserContext()
   const [toogleMenu, setToggleMenu] = useState(false)
+  const navigate = useNavigate();
   const fetchedData = async () => {
     try {
       const response = await axios.get(`${LINK}/profile`, {
@@ -24,6 +26,7 @@ const Nav = () => {
     }
   }
 
+  console.log(information);
   const handleSwitchMode = (e) => {
     const newMode = darkMode === 'dark' ? 'light' : 'dark'
     setDarkMode(newMode)
@@ -66,7 +69,7 @@ const Nav = () => {
               onClick={() => setToggleMenu(!toogleMenu)}
             />
             <BsQuestionLg className="text-white text-[24px]" />
-            <div className="rounded-full w-9 h-9  flex items-center justify-center border-solid border-white border-[1px]">
+            <div onClick={() => navigate('/profile')} className="rounded-full w-9 h-9  flex items-center justify-center border-solid border-white border-[1px]">
               {!information?.information?.profile_image ? (
                 <span className="text-white text-[10px]">
                   {information?.information?.username?.slice(0, 3)}
@@ -74,7 +77,7 @@ const Nav = () => {
               ) : (
                 <img
                   className="w-9 h-9 rounded-full"
-                  src={`http://localhost:5700${information?.information?.profile_image}`}
+                  src={`https://todos-bf1a.onrender.com${information?.information?.profile_image}`}
                 />
               )}
             </div>
