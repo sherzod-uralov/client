@@ -55,17 +55,17 @@ const Register = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen justify-between">
-       <div className="flex justify-between items-center pt-5 md:mt-8 md:hidden">
-          <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
-          <div style={{ width: '120px' }}>
-            <Select
-            className='pr-3'
-              options={options}
-              components={{ Option: CustomOption }}
-              defaultInputValue={options[0].label}
-            />
-          </div>
+      <div className="flex justify-between items-center pt-5 md:mt-8 md:hidden">
+        <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />
+        <div style={{ width: '120px' }}>
+          <Select
+            className="pr-3"
+            options={options}
+            components={{ Option: CustomOption }}
+            defaultInputValue={options[0].label}
+          />
         </div>
+      </div>
       <div className="w-full md:w-1/2 p-5 md:pl-10 md:pr-10 md:pt-10  items-center ">
         <div className="md:flex hidden justify-between items-center md:mt-8">
           <img src={logo} className="w-36 h-10 md:h-20" alt="register-logo" />

@@ -9,6 +9,8 @@ import Nav from '../components/homePage/Nav'
 import SideBar from '../components/homePage/SideBar'
 import List from '../components/homePage/List'
 import NotFound from '../utils/NotFound'
+import Important from '../components/homePage/Important'
+import Task from '../components/homePage/Tasks'
 
 function RouterBrowser() {
   const token = localStorage.getItem('token')
@@ -40,6 +42,30 @@ function RouterBrowser() {
                 <div className="flex">
                   <SideBar />
                   <List />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/important"
+            element={
+              <>
+                <Nav />
+                <div className="flex">
+                  <SideBar />
+                  <Important />
+                </div>
+              </>
+            }
+          />
+           <Route
+            path="/task"
+            element={
+              <>
+                <Nav />
+                <div className="flex">
+                  <SideBar />
+                  <Task />
                 </div>
               </>
             }
