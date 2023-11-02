@@ -56,9 +56,9 @@ const Login = () => {
       }
     }
   }
-
+//salom
   const ceckPaswd = () => {
-    if (password.length == 0) {
+    if (password.length == 0) { 
       return 'border-gray-200'
     }
     if (password.length < 8 || error?.response?.data?.msg == 'wrong password') {
